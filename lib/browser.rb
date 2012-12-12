@@ -12,20 +12,21 @@ class Browser
   alias :ua= :user_agent=
 
   NAMES = {
-    :android    => "Android",
-    :blackberry => "BlackBerry",
-    :chrome     => "Chrome",
-    :firefox    => "Firefox",
-    :ie         => "Internet Explorer",
-    :ipad       => "iPad",
-    :iphone     => "iPhone",
-    :ipod       => "iPod Touch",
-    :opera      => "Opera",
-    :other      => "Other",
-    :safari     => "Safari",
-    :psp        => "PlayStation Portable",
-    :quicktime  => "QuickTime",
-    :core_media => "Apple CoreMedia"
+    :android       => "Android",
+    :blackberry    => "BlackBerry",
+    :chrome        => "Chrome",
+    :firefox       => "Firefox",
+    :ie            => "Internet Explorer",
+    :chrome_frame  => "IE+Chromeframe",
+    :ipad          => "iPad",
+    :iphone        => "iPhone",
+    :ipod          => "iPod Touch",
+    :opera         => "Opera",
+    :other         => "Other",
+    :safari        => "Safari",
+    :psp           => "PlayStation Portable",
+    :quicktime     => "QuickTime",
+    :core_media    => "Apple CoreMedia"
   }
 
   VERSIONS = {
@@ -175,19 +176,20 @@ class Browser
   # Return a symbol that identifies the browser.
   def id
     case
-    when chrome?      then :chrome
-    when iphone?      then :iphone
-    when ipad?        then :ipad
-    when ipod?        then :ipod
-    when ie?          then :ie
-    when opera?       then :opera
-    when firefox?     then :firefox
-    when android?     then :android
-    when blackberry?  then :blackberry
-    when safari?      then :safari
-    when psp?         then :psp
-    when quicktime?   then :quicktime
-    when core_media?  then :core_media
+    when chrome?       then :chrome
+    when iphone?       then :iphone
+    when ipad?         then :ipad
+    when ipod?         then :ipod
+    when chrome_frame? then :chrome_frame
+    when ie?           then :ie
+    when opera?        then :opera
+    when firefox?      then :firefox
+    when android?      then :android
+    when blackberry?   then :blackberry
+    when safari?       then :safari
+    when psp?          then :psp
+    when quicktime?    then :quicktime
+    when core_media?   then :core_media
     else
       :other
     end
@@ -308,6 +310,11 @@ class Browser
     ie? && version == "9"
   end
 
+  # Detect if browser is IE running Chrome Frame
+  def chrome_frame?
+    !!(ua =~ /chromeframe/)
+  end
+
   # Detect if browser is running from PSP.
   def psp?
     !!(ua =~ /PSP/)
@@ -370,6 +377,7 @@ class Browser
       m << platform
       m << "capable" if capable?
       m << "mobile" if mobile?
+      m << "chromeframe" if chrome_frame?
     end
   end
 
